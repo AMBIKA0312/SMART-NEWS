@@ -100,24 +100,24 @@ export default function ShortsPage() {
   }, [])
 
   useEffect(() => {
-    const container = containerRef.current
+   function scrollOne(direction: number) {
+  if (scrolling.current) return
 
-    if (!container) return
+  const container = containerRef.current
 
-    function scrollOne(direction: number) {
-      if (scrolling.current) return
+  if (!container) return
 
-      scrolling.current = true
+  scrolling.current = true
 
-      container.scrollBy({
-        top: direction * container.clientHeight,
-        behavior: "smooth",
-      })
+  container.scrollBy({
+    top: direction * container.clientHeight,
+    behavior: "smooth",
+  })
 
-      setTimeout(() => {
-        scrolling.current = false
-      }, 500)
-    }
+  setTimeout(() => {
+    scrolling.current = false
+  }, 500)
+}
 
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault()
@@ -153,23 +153,27 @@ export default function ShortsPage() {
       }
     }
 
-    container.addEventListener("wheel", wheelHandler, {
-      passive: false,
-    })
+    const container = containerRef.current
 
-    window.addEventListener("keydown", keyHandler)
+if (!container) return
 
-    return () => {
-      container.removeEventListener(
-        "wheel",
-        wheelHandler
-      )
+container.addEventListener("wheel", wheelHandler, {
+  passive: false,
+})
 
-      window.removeEventListener(
-        "keydown",
-        keyHandler
-      )
-    }
+window.addEventListener("keydown", keyHandler)
+
+return () => {
+  container.removeEventListener(
+    "wheel",
+    wheelHandler
+  )
+
+  window.removeEventListener(
+    "keydown",
+    keyHandler
+  )
+}
   }, [])
 
   if (loading) {
